@@ -91,7 +91,7 @@ mongodb shell = msi 64
 
 envirment variable set (path mongodb/bin valo)
 
-php driver install
+php driver install(pecl.php.net/package/mogodb)
 ini file ma dll(extension=mongodb file include karvu
 [ ini file = laragon/zemp na folder ma ]
 then info.php file banavi <? php phpinfo(); 
