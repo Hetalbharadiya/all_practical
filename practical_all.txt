@@ -90,7 +90,7 @@ mongodb download = msi 64
 mongodb shell = msi 64
 
 envirment variable set (path mongodb/bin valo)
-
+check php version in cmd : "php -v"
 php driver install(pecl.php.net/package/mogodb)
 ini file ma dll(extension=mongodb file include karvu
 [ ini file = laragon/zemp na folder ma ]
@@ -98,6 +98,9 @@ then info.php file banavi <? php phpinfo();
 open localhost/foldername/filename
 check that thred safe in enable 
 the open cmd of your project folder run : composer require mongodb/mongodb
+
+run php ni jem j 
+localhost/foldername/filename
 
 ///////index.php
 
@@ -229,29 +232,17 @@ if (isset($_POST['update'])) {
 
 ------------------LARAVEL
 
-install composer from google
+check if laravel already exist : open cmd , search laravel , if it gives version , it is already installed
+
+install composer from google : composer website 
 open cmd
 composer global require laravel/installer
 create project:
 laravel new example-app
 cd example-app
 
-change database name in env file 
-make database
-🔹 WHAT TO DOWNLOAD (IN THIS ORDER)
-Step 1: XAMPP
 
-Download XAMPP
 
-Install
-
-Start Apache + MySQL
-
-Step 2: Composer
-
-Download Composer
-
-Install
 
 Verify:
 
@@ -263,7 +254,10 @@ composer create-project laravel/laravel studentapp
 cd studentapp
 
 🔹 DATABASE SETUP
-Step 3: Create Database
+Step 3: Create Databas
+
+change database name in env file 
+
 
 Open:
 
