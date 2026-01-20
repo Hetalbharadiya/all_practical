@@ -273,68 +273,238 @@ DB_DATABASE=studentdb
 DB_USERNAME=root
 DB_PASSWORD=
 
+index.php
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student CRUD</title>
+</head>
+<body>
+
+<h2>Add Student</h2>
+
+<form method="POST" action="/students">
+    @csrf
+    <input type="text" name="name" placeholder="Name" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <button type="submit">Save</button>
+</form>
+
+<hr>
+
+<h2>Student List</h2>
+
+<table border="1" cellpadding="10">
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Action</th>
+</tr>
+
+@foreach($students as $student)
+<tr>
+    <td>{{ $student->id }}</td>
+    <td>{{ $student->name }}</td>
+    <td>{{ $student->email }}</td>
+
+    <td>
+
+        <!-- DELETE -->
+        <form method="POST" action="/students/{{ $student->id }}" style="display:inline-block;">
+            @csrf
+            @method('DELETE')
+            <button type="submit">Delete</button>
+        </form>
+
+        <!-- EDIT BUTTON -->
+        <button onclick="document.getElementById('edit{{ $student->id }}').style.display='block'">
+            Edit
+        </button>
+
+        <!-- UPDATE FORM -->
+        <div id="edit{{ $student->id }}" style="display:none; margin-top:10px;">
+
+            <form method="POST" action="/students/{{ $student->id }}">
+                @csrf
+                @method('PUT')
+
+                <input type="text" name="name" value="{{ $student->name }}" required>
+                <input type="email" name="email" value="{{ $student->email }}" required>
+
+                <button type="submit">Update</button>
+            </form>
+
+        </div>
+
+    </td>
+</tr>
+@endforeach
+
+</table>
+
+</body>
+</html>
+
+
 🔹 MODEL + MIGRATION
-php artisan make:model Student -m
+
 
 Edit Migration
-Schema::create('students', function (Blueprint $table) {
-    $table->id();
-    $table->string('name');
-    $table->string('email');
-    $table->timestamps();
-});
+database/migrations/xxxx_create_students_table.php
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up()
+    {
+        Schema::create('students', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('students');
+    }
+};
 
 
 Run:
 
 php artisan migrate
 
-🔹 MODEL
-protected $fillable = ['name','email'];
+🔹 MODEL 1 student "php artisan make:model Student -m"
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Student extends Model
+{
+    protected $fillable = ['name','email'];
+}
+
+🔹 MODEL 2 user = will be already but if not then make it =  "php artisan make:model User -m"
+<?php
+
+namespace App\Models;
+
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+class User extends Authenticatable
+{
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use HasFactory, Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+}
+
 
 🔹 CONTROLLER
 php artisan make:controller StudentController
 
-public function index() {
-    $students = Student::all();
-    return view('students.index', compact('students'));
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Student;
+use Illuminate\Http\Request;
+
+class StudentController extends Controller
+{
+    public function index()
+    {
+        $students = Student::all();
+        return view('students.index', compact('students'));
+    }
+
+    public function store(Request $request)
+    {
+        Student::create($request->all());
+        return redirect()->back();
+    }
+
+    public function update(Request $request, $id)
+    {
+        $student = Student::find($id);
+        $student->update($request->all());
+        return redirect()->back();
+    }
+
+    public function destroy($id)
+    {
+        Student::destroy($id);
+        return redirect()->back();
+    }
 }
 
-public function store(Request $r) {
-    Student::create($r->all());
-    return back();
-}
-
-public function update(Request $r, $id) {
-    Student::find($id)->update($r->all());
-    return back();
-}
-
-public function destroy($id) {
-    Student::destroy($id);
-    return back();
-}
 
 🔹 ROUTES (web.php)
-Route::get('/', fn() => redirect('students'));
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\StudentController;
+
+Route::get('/', function () {
+    return redirect('students');
+});
+
 Route::resource('students', StudentController::class);
 
-🔹 VIEW (index.blade.php)
-<form method="POST" action="/students">
-@csrf
-<input name="name">
-<input name="email">
-<button>Save</button>
-</form>
 
-@foreach($students as $s)
-{{ $s->name }} {{ $s->email }}
 
-<form method="POST" action="/students/{{ $s->id }}">
-@csrf @method('DELETE')
-<button>Delete</button>
-</form>
-@endforeach
 
 Run Laravel
 php artisan serve
