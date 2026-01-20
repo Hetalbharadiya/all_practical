@@ -1,0 +1,346 @@
+-----------------------java : 
+
+List consturctur , setter injection
+
+✅ Step 1: Download JDK
+
+Search: Temurin JDK 17
+
+Download: Windows x64 .msi
+
+Install → Next → Finish
+
+ConstructorInjectionExample.java
+
+import java.util.*;
+
+class StudentList {
+    private List<String> students;
+
+    public StudentList(List<String> students) {
+        this.students = students;
+    }
+
+    public void showStudents() {
+        System.out.println("Students (Constructor Injection):");
+        for(String s : students) {
+            System.out.println(s);
+        }
+    }
+}
+
+public class ConstructorInjectionExample {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("Hetal");
+        list.add("Arin");
+        list.add("John");
+
+        StudentList obj = new StudentList(list);
+        obj.showStudents();
+    }
+}
+
+
+SetterInjectionExample.java
+
+import java.util.*;
+
+class StudentList {
+    private List<String> students;
+
+    public void setStudents(List<String> students) {
+        this.students = students;
+    }
+
+    public void showStudents() {
+        System.out.println("Students (Setter Injection):");
+        for(String s : students) {
+            System.out.println(s);
+        }
+    }
+}
+
+public class SetterInjectionExample {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("Hetal");
+        list.add("Arin");
+        list.add("John");
+
+        StudentList obj = new StudentList();
+        obj.setStudents(list);
+        obj.showStudents();
+    }
+}
+
+run : 
+cmd: project location
+javac projectname.java
+java projectname
+
+
+
+
+
+
+-------------------MONGODB
+
+mongodb download = msi 64
+mongodb shell = msi 64
+
+envirment variable set (path mongodb/bin valo)
+
+php driver install
+ini file ma dll(extension=mongodb file include karvu
+[ ini file = laragon/zemp na folder ma ]
+then info.php file banavi <? php phpinfo(); 
+open localhost/foldername/filename
+check that thred safe in enable 
+the open cmd of your project folder run : composer require mongodb/mongodb
+
+///////index.php
+
+<?php
+require_once __DIR__ . "/vendor/autoload.php";
+
+// Connect MongoDB
+$client = new MongoDB\Client("mongodb://localhost:27017");
+$collection = $client->studentDB->students;
+
+// INSERT
+if (isset($_POST['save'])) {
+    $collection->insertOne([
+        'name'  => $_POST['name'],
+        'email' => $_POST['email']
+    ]);
+}
+
+// DELETE
+if (isset($_GET['delete'])) {
+    $collection->deleteOne([
+        '_id' => new MongoDB\BSON\ObjectId($_GET['delete'])
+    ]);
+}
+
+// READ
+$data = $collection->find();
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>MongoDB PHP CRUD</title>
+</head>
+<body>
+
+<h2>Add Student</h2>
+
+<form method="post">
+    Name: <input name="name" required><br><br>
+    Email: <input name="email" required><br><br>
+    <button name="save">Save</button>
+</form>
+
+<hr>
+
+<h2>Student List</h2>
+
+<table border="1" cellpadding="8">
+<tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Action</th>
+</tr>
+
+<?php foreach ($data as $row) { ?>
+<tr>
+    <td><?= $row['name'] ?></td>
+    <td><?= $row['email'] ?></td>
+    <td>
+        <a href="edit.php?id=<?= $row['_id'] ?>">Edit</a> |
+        <a href="?delete=<?= $row['_id'] ?>">Delete</a>
+    </td>
+</tr>
+<?php } ?>
+
+</table>
+
+</body>
+</html>
+
+
+//////edit.php
+<?php
+require_once __DIR__ . "/vendor/autoload.php";
+
+// Connect MongoDB
+$client = new MongoDB\Client("mongodb://localhost:27017");
+$collection = $client->studentDB->students;
+
+$id = $_GET['id'];
+
+// GET DATA BY ID
+$student = $collection->findOne([
+    '_id' => new MongoDB\BSON\ObjectId($id)
+]);
+
+// UPDATE
+if (isset($_POST['update'])) {
+    $collection->updateOne(
+        ['_id' => new MongoDB\BSON\ObjectId($_POST['id'])],
+        ['$set' => [
+            'name'  => $_POST['name'],
+            'email' => $_POST['email']
+        ]]
+    );
+
+    header("Location: index.php");
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Update Student</title>
+</head>
+<body>
+
+<h2>Update Student</h2>
+
+<form method="post">
+    <input type="hidden" name="id" value="<?= $student['_id'] ?>">
+
+    Name: <input name="name" value="<?= $student['name'] ?>" required><br><br>
+    Email: <input name="email" value="<?= $student['email'] ?>" required><br><br>
+
+    <button name="update">Update</button>
+</form>
+
+<br>
+<a href="index.php">Back</a>
+
+</body>
+</html>
+
+
+
+
+
+------------------LARAVEL
+
+install composer from google
+open cmd
+composer global require laravel/installer
+create project:
+laravel new example-app
+cd example-app
+
+change database name in env file 
+make database
+🔹 WHAT TO DOWNLOAD (IN THIS ORDER)
+Step 1: XAMPP
+
+Download XAMPP
+
+Install
+
+Start Apache + MySQL
+
+Step 2: Composer
+
+Download Composer
+
+Install
+
+Verify:
+
+composer -V
+
+🔹 CREATE PROJECT
+cd C:\xampp\htdocs
+composer create-project laravel/laravel studentapp
+cd studentapp
+
+🔹 DATABASE SETUP
+Step 3: Create Database
+
+Open:
+
+http://localhost/phpmyadmin
+
+
+Create DB:
+
+studentdb
+
+Step 4: Configure .env
+DB_DATABASE=studentdb
+DB_USERNAME=root
+DB_PASSWORD=
+
+🔹 MODEL + MIGRATION
+php artisan make:model Student -m
+
+Edit Migration
+Schema::create('students', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->string('email');
+    $table->timestamps();
+});
+
+
+Run:
+
+php artisan migrate
+
+🔹 MODEL
+protected $fillable = ['name','email'];
+
+🔹 CONTROLLER
+php artisan make:controller StudentController
+
+public function index() {
+    $students = Student::all();
+    return view('students.index', compact('students'));
+}
+
+public function store(Request $r) {
+    Student::create($r->all());
+    return back();
+}
+
+public function update(Request $r, $id) {
+    Student::find($id)->update($r->all());
+    return back();
+}
+
+public function destroy($id) {
+    Student::destroy($id);
+    return back();
+}
+
+🔹 ROUTES (web.php)
+Route::get('/', fn() => redirect('students'));
+Route::resource('students', StudentController::class);
+
+🔹 VIEW (index.blade.php)
+<form method="POST" action="/students">
+@csrf
+<input name="name">
+<input name="email">
+<button>Save</button>
+</form>
+
+@foreach($students as $s)
+{{ $s->name }} {{ $s->email }}
+
+<form method="POST" action="/students/{{ $s->id }}">
+@csrf @method('DELETE')
+<button>Delete</button>
+</form>
+@endforeach
+
+Run Laravel
+php artisan serve
