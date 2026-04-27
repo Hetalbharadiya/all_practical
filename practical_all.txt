@@ -1,510 +1,498 @@
------------------------java : 
+React Practicle : 
 
-List consturctur , setter injection
+⚛️ STEP 1: Install Node.js (MOST IMPORTANT)
 
-✅ Step 1: Download JDK
+👉 React directly download nahi hota — pehle Node.js install karna padta hai
 
-Search: Temurin JDK 17
+🔗 Website:
 
-Download: Windows x64 .msi
+Go to: https://nodejs.org
 
-Install → Next → Finish
+What to do:
+Open website
+Click LTS version (Recommended)
+Download .msi file
+🧩 Install Steps:
+Double click downloaded file
+Click Next → Next → Next
+Tick ✔ Add to PATH (important)
+Click Install
+Finish
+✅ Check Installation:
 
-ConstructorInjectionExample.java
+Open Command Prompt and type:
 
-import java.util.*;
+node -v
+npm -v
 
-class StudentList {
-    private List<String> students;
+👉 Agar version number aa gaya = ✅ success
+👉 Error aaya = Node properly install nahi hua
 
-    public StudentList(List<String> students) {
-        this.students = students;
+⚛️ STEP 2: Create React App
+
+अब actual React start होता है 👇
+
+Open Command Prompt:
+cd Desktop
+
+(ya jahan project banana hai)
+
+Run this command:
+npx create-react-app myapp
+
+👉 "myapp" = project name (kuch bhi rakh sakte ho)
+
+Important:
+First time slow lagega (internet use karega)
+2–5 minutes lag sakte hai
+⚛️ STEP 3: Open Project
+cd myapp
+⚛️ STEP 4: Run React App
+npm start
+
+👉 Browser automatically open hoga
+👉 URL: http://localhost:3000
+
+
+
+Code : 
+
+🎓 1. Student Information Form (React)
+import React, { useState } from "react";
+
+function App() {
+  const [student, setStudent] = useState({
+    name: "",
+    email: "",
+    age: "",
+    gender: "",
+    course: "",
+    address: ""
+  });
+
+  const handleChange = (e) => {
+    setStudent({
+      ...student,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert("Student Data:\n" + JSON.stringify(student, null, 2));
+  };
+
+  return (
+    <div style={{ textAlign: "center", marginTop: "30px" }}>
+      <h2>Student Information Form</h2>
+
+      <form onSubmit={handleSubmit}>
+        
+        <input type="text" name="name" placeholder="Name" onChange={handleChange} /><br /><br />
+        
+        <input type="email" name="email" placeholder="Email" onChange={handleChange} /><br /><br />
+        
+        <input type="number" name="age" placeholder="Age" onChange={handleChange} /><br /><br />
+
+        {/* Gender */}
+        <label>Gender: </label>
+        <input type="radio" name="gender" value="Male" onChange={handleChange} /> Male
+        <input type="radio" name="gender" value="Female" onChange={handleChange} /> Female
+        <br /><br />
+
+        {/* Course Dropdown */}
+        <select name="course" onChange={handleChange}>
+          <option value="">Select Course</option>
+          <option value="BCA">BCA</option>
+          <option value="BBA">BBA</option>
+          <option value="MCA">MCA</option>
+        </select>
+        <br /><br />
+
+        {/* Address */}
+        <textarea name="address" placeholder="Address" onChange={handleChange}></textarea>
+        <br /><br />
+
+        <button type="submit">Submit</button>
+
+      </form>
+    </div>
+  );
+}
+
+export default App;
+🧑‍💼 2. Employee Information Form (React)
+import React, { useState } from "react";
+
+function App() {
+  const [employee, setEmployee] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    department: "",
+    salary: "",
+    joiningDate: "",
+    address: ""
+  });
+
+  const handleChange = (e) => {
+    setEmployee({
+      ...employee,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert("Employee Data:\n" + JSON.stringify(employee, null, 2));
+  };
+
+  return (
+    <div style={{ textAlign: "center", marginTop: "30px" }}>
+      <h2>Employee Information Form</h2>
+
+      <form onSubmit={handleSubmit}>
+        
+        <input type="text" name="name" placeholder="Name" onChange={handleChange} /><br /><br />
+        
+        <input type="email" name="email" placeholder="Email" onChange={handleChange} /><br /><br />
+        
+        <input type="text" name="phone" placeholder="Phone Number" onChange={handleChange} /><br /><br />
+
+        {/* Department */}
+        <select name="department" onChange={handleChange}>
+          <option value="">Select Department</option>
+          <option value="HR">HR</option>
+          <option value="IT">IT</option>
+          <option value="Sales">Sales</option>
+        </select>
+        <br /><br />
+
+        <input type="number" name="salary" placeholder="Salary" onChange={handleChange} /><br /><br />
+
+        <input type="date" name="joiningDate" onChange={handleChange} /><br /><br />
+
+        <textarea name="address" placeholder="Address" onChange={handleChange}></textarea>
+        <br /><br />
+
+        <button type="submit">Submit</button>
+
+      </form>
+    </div>
+  );
+}
+
+export default App;
+
+🎯 FINAL OUTPUT
+
+React app screen dikhegi (default React logo)
+
+
+
+
+
+
+
+Android :
+
+📱 STEP 1: Download Android Studio
+
+👉 Android development ke liye Android Studio required hai
+
+🔗 Website:
+
+Go to: https://developer.android.com/studio
+
+What to do:
+Click Download Android Studio
+Accept terms ✔
+Download .exe file
+📱 STEP 2: Install Android Studio
+🧩 Installation Steps:
+Double click downloaded file
+Click Next → Next
+Make sure these are selected:
+✔ Android Studio
+✔ Android Virtual Device (AVD)
+Click Install
+Wait (important: 10–20 min lag sakte hai)
+Click Finish
+📱 STEP 3: First Time Setup
+
+Android Studio open karo 👇
+
+It will ask:
+"Import settings?" → No / Do not import
+Setup Wizard:
+Select Standard
+Theme choose karo (Dark/Light — koi bhi)
+Click Next → Finish
+
+👉 Ye automatically download karega:
+
+Android SDK
+Emulator tools
+
+⏳ Time: 10–30 minutes (internet required)
+
+📱 STEP 4: Create New Project
+Click New Project
+Select Empty Activity
+Click Next
+Fill details:
+Name → MyApp
+Language → Java ✅ (important for your exam)
+Minimum SDK → API 21 (recommended)
+
+Click Finish
+
+📱 STEP 5: Understand Project Files
+
+Important files (exam me puchte hai):
+
+👉 MainActivity.java
+→ Logic / code likhne ke liye
+
+👉 activity_main.xml
+→ UI design (buttons, text, etc.)
+
+📱 STEP 6: Run App
+Option 1: Emulator
+Click AVD Manager
+Create Virtual Device
+Click Run ▶
+
+
+
+Code : 
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/name"
+        android:hint="Enter Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnInsert"
+        android:text="Insert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnView"
+        android:text="View"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnUpdate"
+        android:text="Update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnDelete"
+        android:text="Delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
+🧠 2. Database Helper (Java)
+import android.content.*;
+import android.database.Cursor;
+import android.database.sqlite.*;
+
+public class DBHelper extends SQLiteOpenHelper {
+
+    public DBHelper(Context context) {
+        super(context, "UserDB", null, 1);
     }
 
-    public void showStudents() {
-        System.out.println("Students (Constructor Injection):");
-        for(String s : students) {
-            System.out.println(s);
-        }
-    }
-}
-
-public class ConstructorInjectionExample {
-    public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-        list.add("Hetal");
-        list.add("Arin");
-        list.add("John");
-
-        StudentList obj = new StudentList(list);
-        obj.showStudents();
-    }
-}
-
-
-SetterInjectionExample.java
-
-import java.util.*;
-
-class StudentList {
-    private List<String> students;
-
-    public void setStudents(List<String> students) {
-        this.students = students;
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)");
     }
 
-    public void showStudents() {
-        System.out.println("Students (Setter Injection):");
-        for(String s : students) {
-            System.out.println(s);
-        }
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS users");
+    }
+
+    public boolean insertData(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("name", name);
+        long result = db.insert("users", null, cv);
+        return result != -1;
+    }
+
+    public Cursor getData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM users", null);
+    }
+
+    public boolean updateData(String id, String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("name", name);
+        db.update("users", cv, "id=?", new String[]{id});
+        return true;
+    }
+
+    public Integer deleteData(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete("users", "id=?", new String[]{id});
     }
 }
-
-public class SetterInjectionExample {
-    public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
-        list.add("Hetal");
-        list.add("Arin");
-        list.add("John");
-
-        StudentList obj = new StudentList();
-        obj.setStudents(list);
-        obj.showStudents();
-    }
-}
-
-run : 
-cmd: project location
-javac projectname.java
-java projectname
-
-
-
-
-
-
--------------------MONGODB
-
-mongodb download = msi 64
-mongodb shell = msi 64
-
-envirment variable set (path mongodb/bin valo)
-check php version in cmd : "php -v"
-php driver install(pecl.php.net/package/mogodb)
-ini file ma dll(extension=mongodb file include karvu
-[ ini file = laragon/zemp na folder ma ]
-then info.php file banavi <? php phpinfo(); 
-open localhost/foldername/filename
-check that thred safe in enable 
-the open cmd of your project folder run : composer require mongodb/mongodb
-
-run php ni jem j 
-localhost/foldername/filename
-
-///////index.php
-
-<?php
-require_once __DIR__ . "/vendor/autoload.php";
-
-// Connect MongoDB
-$client = new MongoDB\Client("mongodb://localhost:27017");
-$collection = $client->studentDB->students;
-
-// INSERT
-if (isset($_POST['save'])) {
-    $collection->insertOne([
-        'name'  => $_POST['name'],
-        'email' => $_POST['email']
-    ]);
-}
-
-// DELETE
-if (isset($_GET['delete'])) {
-    $collection->deleteOne([
-        '_id' => new MongoDB\BSON\ObjectId($_GET['delete'])
-    ]);
-}
-
-// READ
-$data = $collection->find();
-?>
-
-<!DOCTYPE html>
-<html>
-<head>
-<title>MongoDB PHP CRUD</title>
-</head>
-<body>
-
-<h2>Add Student</h2>
-
-<form method="post">
-    Name: <input name="name" required><br><br>
-    Email: <input name="email" required><br><br>
-    <button name="save">Save</button>
-</form>
-
-<hr>
-
-<h2>Student List</h2>
-
-<table border="1" cellpadding="8">
-<tr>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Action</th>
-</tr>
-
-<?php foreach ($data as $row) { ?>
-<tr>
-    <td><?= $row['name'] ?></td>
-    <td><?= $row['email'] ?></td>
-    <td>
-        <a href="edit.php?id=<?= $row['_id'] ?>">Edit</a> |
-        <a href="?delete=<?= $row['_id'] ?>">Delete</a>
-    </td>
-</tr>
-<?php } ?>
-
-</table>
-
-</body>
-</html>
-
-
-//////edit.php
-<?php
-require_once __DIR__ . "/vendor/autoload.php";
-
-// Connect MongoDB
-$client = new MongoDB\Client("mongodb://localhost:27017");
-$collection = $client->studentDB->students;
-
-$id = $_GET['id'];
-
-// GET DATA BY ID
-$student = $collection->findOne([
-    '_id' => new MongoDB\BSON\ObjectId($id)
-]);
-
-// UPDATE
-if (isset($_POST['update'])) {
-    $collection->updateOne(
-        ['_id' => new MongoDB\BSON\ObjectId($_POST['id'])],
-        ['$set' => [
-            'name'  => $_POST['name'],
-            'email' => $_POST['email']
-        ]]
-    );
-
-    header("Location: index.php");
-}
-?>
-
-<!DOCTYPE html>
-<html>
-<head>
-<title>Update Student</title>
-</head>
-<body>
-
-<h2>Update Student</h2>
-
-<form method="post">
-    <input type="hidden" name="id" value="<?= $student['_id'] ?>">
-
-    Name: <input name="name" value="<?= $student['name'] ?>" required><br><br>
-    Email: <input name="email" value="<?= $student['email'] ?>" required><br><br>
-
-    <button name="update">Update</button>
-</form>
-
-<br>
-<a href="index.php">Back</a>
-
-</body>
-</html>
-
-
-
-
-
-------------------LARAVEL
-
-check if laravel already exist : open cmd , search laravel , if it gives version , it is already installed
-
-install composer from google : composer website 
-open cmd
-composer global require laravel/installer
-create project:
-laravel new example-app
-cd example-app
-
-
-
-
-Verify:
-
-composer -V
-
-🔹 CREATE PROJECT
-cd C:\xampp\htdocs
-composer create-project laravel/laravel studentapp
-cd studentapp
-
-🔹 DATABASE SETUP
-Step 3: Create Databas
-
-change database name in env file 
-
-
-Open:
-
-http://localhost/phpmyadmin
-
-
-Create DB:
-
-studentdb
-
-Step 4: Configure .env
-DB_DATABASE=studentdb
-DB_USERNAME=root
-DB_PASSWORD=
-
-index.php
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Student CRUD</title>
-</head>
-<body>
-
-<h2>Add Student</h2>
-
-<form method="POST" action="/students">
-    @csrf
-    <input type="text" name="name" placeholder="Name" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <button type="submit">Save</button>
-</form>
-
-<hr>
-
-<h2>Student List</h2>
-
-<table border="1" cellpadding="10">
-<tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Action</th>
-</tr>
-
-@foreach($students as $student)
-<tr>
-    <td>{{ $student->id }}</td>
-    <td>{{ $student->name }}</td>
-    <td>{{ $student->email }}</td>
-
-    <td>
-
-        <!-- DELETE -->
-        <form method="POST" action="/students/{{ $student->id }}" style="display:inline-block;">
-            @csrf
-            @method('DELETE')
-            <button type="submit">Delete</button>
-        </form>
-
-        <!-- EDIT BUTTON -->
-        <button onclick="document.getElementById('edit{{ $student->id }}').style.display='block'">
-            Edit
-        </button>
-
-        <!-- UPDATE FORM -->
-        <div id="edit{{ $student->id }}" style="display:none; margin-top:10px;">
-
-            <form method="POST" action="/students/{{ $student->id }}">
-                @csrf
-                @method('PUT')
-
-                <input type="text" name="name" value="{{ $student->name }}" required>
-                <input type="email" name="email" value="{{ $student->email }}" required>
-
-                <button type="submit">Update</button>
-            </form>
-
-        </div>
-
-    </td>
-</tr>
-@endforeach
-
-</table>
-
-</body>
-</html>
-
-
-🔹 MODEL + MIGRATION
-
-
-Edit Migration
-database/migrations/xxxx_create_students_table.php
-<?php
-
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
-    public function up()
-    {
-        Schema::create('students', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email');
-            $table->timestamps();
+☕ 3. MainActivity (Java)
+import android.database.Cursor;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText name;
+    Button insert, view, update, delete;
+    DBHelper db;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        name = findViewById(R.id.name);
+        insert = findViewById(R.id.btnInsert);
+        view = findViewById(R.id.btnView);
+        update = findViewById(R.id.btnUpdate);
+        delete = findViewById(R.id.btnDelete);
+
+        db = new DBHelper(this);
+
+        insert.setOnClickListener(v -> {
+            db.insertData(name.getText().toString());
+            Toast.makeText(this, "Inserted", Toast.LENGTH_SHORT).show();
+        });
+
+        view.setOnClickListener(v -> {
+            Cursor res = db.getData();
+            StringBuilder data = new StringBuilder();
+            while (res.moveToNext()) {
+                data.append("ID: ").append(res.getString(0)).append("\n");
+                data.append("Name: ").append(res.getString(1)).append("\n\n");
+            }
+            Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show();
+        });
+
+        update.setOnClickListener(v -> {
+            db.updateData("1", name.getText().toString());
+            Toast.makeText(this, "Updated ID 1", Toast.LENGTH_SHORT).show();
+        });
+
+        delete.setOnClickListener(v -> {
+            db.deleteData("1");
+            Toast.makeText(this, "Deleted ID 1", Toast.LENGTH_SHORT).show();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('students');
-    }
-};
-
-
-Run:
-
-php artisan migrate
-
-🔹 MODEL 1 student "php artisan make:model Student -m"
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
-
-class Student extends Model
-{
-    protected $fillable = ['name','email'];
 }
+🔥 4. Kotlin Version
+📦 DBHelper.kt
+import android.content.ContentValues
+import android.content.Context
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
 
-🔹 MODEL 2 user = will be already but if not then make it =  "php artisan make:model User -m"
-<?php
+class DBHelper(context: Context) :
+    SQLiteOpenHelper(context, "UserDB", null, 1) {
 
-namespace App\Models;
+    override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL("CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)")
+    }
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        db.execSQL("DROP TABLE IF EXISTS users")
+    }
 
-class User extends Authenticatable
-{
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    fun insertData(name: String): Boolean {
+        val db = writableDatabase
+        val cv = ContentValues()
+        cv.put("name", name)
+        return db.insert("users", null, cv) != -1L
+    }
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    fun getData(): Cursor {
+        val db = readableDatabase
+        return db.rawQuery("SELECT * FROM users", null)
+    }
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    fun updateData(id: String, name: String): Boolean {
+        val db = writableDatabase
+        val cv = ContentValues()
+        cv.put("name", name)
+        db.update("users", cv, "id=?", arrayOf(id))
+        return true
+    }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+    fun deleteData(id: String): Int {
+        val db = writableDatabase
+        return db.delete("users", "id=?", arrayOf(id))
     }
 }
+📱 MainActivity.kt
+import android.database.Cursor
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 
+class MainActivity : AppCompatActivity() {
 
-🔹 CONTROLLER
-php artisan make:controller StudentController
+    lateinit var name: EditText
+    lateinit var db: DBHelper
 
-<?php
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-namespace App\Http\Controllers;
+        name = findViewById(R.id.name)
+        val insert = findViewById<Button>(R.id.btnInsert)
+        val view = findViewById<Button>(R.id.btnView)
+        val update = findViewById<Button>(R.id.btnUpdate)
+        val delete = findViewById<Button>(R.id.btnDelete)
 
-use App\Models\Student;
-use Illuminate\Http\Request;
+        db = DBHelper(this)
 
-class StudentController extends Controller
-{
-    public function index()
-    {
-        $students = Student::all();
-        return view('students.index', compact('students'));
-    }
+        insert.setOnClickListener {
+            db.insertData(name.text.toString())
+            Toast.makeText(this, "Inserted", Toast.LENGTH_SHORT).show()
+        }
 
-    public function store(Request $request)
-    {
-        Student::create($request->all());
-        return redirect()->back();
-    }
+        view.setOnClickListener {
+            val res: Cursor = db.getData()
+            val data = StringBuilder()
+            while (res.moveToNext()) {
+                data.append("ID: ${res.getString(0)}\n")
+                data.append("Name: ${res.getString(1)}\n\n")
+            }
+            Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
+        }
 
-    public function update(Request $request, $id)
-    {
-        $student = Student::find($id);
-        $student->update($request->all());
-        return redirect()->back();
-    }
+        update.setOnClickListener {
+            db.updateData("1", name.text.toString())
+            Toast.makeText(this, "Updated ID 1", Toast.LENGTH_SHORT).show()
+        }
 
-    public function destroy($id)
-    {
-        Student::destroy($id);
-        return redirect()->back();
+        delete.setOnClickListener {
+            db.deleteData("1")
+            Toast.makeText(this, "Deleted ID 1", Toast.LENGTH_SHORT).show()
+        }
     }
 }
-
-
-🔹 ROUTES (web.php)
-<?php
-
-use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\StudentController;
-
-Route::get('/', function () {
-    return redirect('students');
-});
-
-Route::resource('students', StudentController::class);
-
-
-
-
-Run Laravel
-php artisan serve
