@@ -53,11 +53,228 @@ npm start
 👉 Browser automatically open hoga
 👉 URL: http://localhost:3000
 
-
+****************************************************************
 
 Code : 
 
-🎓 1. Student Information Form (React)
+🧩 PART 1: LARAVEL BACKEND (FULL SETUP)
+▶️ STEP 1: Create Project
+
+Open terminal:
+
+composer create-project laravel/laravel student-api
+cd student-api
+php artisan serve
+
+👉 Runs: http://127.0.0.1:8000
+
+▶️ STEP 2: Setup MySQL Database
+
+👉 Open phpMyAdmin → Create DB:
+
+studentdb
+📄 Edit .env file
+
+📍 Location: student-api/.env
+
+DB_DATABASE=studentdb
+DB_USERNAME=root
+DB_PASSWORD=
+▶️ STEP 3: Create Model + Migration
+php artisan make:model Student -m
+📄 Edit Migration
+
+📍 database/migrations/xxxx_create_students_table.php
+
+public function up()
+{
+    Schema::create('students', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->string('email');
+        $table->string('phone');
+        $table->string('course');
+        $table->timestamps();
+    });
+}
+Run:
+php artisan migrate
+▶️ STEP 4: Create Controller
+php artisan make:controller StudentController
+📄 Controller Code
+
+📍 app/Http/Controllers/StudentController.php
+
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Student;
+use Illuminate\Http\Request;
+
+class StudentController extends Controller
+{
+    public function index()
+    {
+        return Student::all();
+    }
+
+    public function store(Request $req)
+    {
+        return Student::create($req->all());
+    }
+
+    public function update(Request $req, $id)
+    {
+        $student = Student::find($id);
+        $student->update($req->all());
+        return $student;
+    }
+
+    public function destroy($id)
+    {
+        return Student::destroy($id);
+    }
+}
+▶️ STEP 5: Model Setup
+
+📍 app/Models/Student.php
+
+php artisan make:model Student
+
+protected $fillable = ['name', 'email', 'phone', 'course'];
+▶️ STEP 6: API Routes
+
+📍 routes/api.php
+
+use App\Http\Controllers\StudentController;
+
+Route::get('/students', [StudentController::class, 'index']);
+Route::post('/students', [StudentController::class, 'store']);
+Route::put('/students/{id}', [StudentController::class, 'update']);
+Route::delete('/students/{id}', [StudentController::class, 'destroy']);
+▶️ STEP 7: Enable CORS
+
+📍 config/cors.php
+
+'paths' => ['api/*'],
+'allowed_origins' => ['*'],
+🧩 PART 2: REACT FRONTEND (FULL SETUP)
+▶️ STEP 1: Create React App
+npx create-react-app frontend
+cd frontend
+npm install axios
+npm start
+▶️ STEP 2: Replace App.js
+
+📍 frontend/src/App.js
+
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+function App() {
+  const API = "http://127.0.0.1:8000/api/students";
+
+  const [students, setStudents] = useState([]);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    course: ""
+  });
+  const [editId, setEditId] = useState(null);
+
+  // Fetch data
+  const fetchData = async () => {
+    const res = await axios.get(API);
+    setStudents(res.data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Handle input
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  // Add or Update
+  const handleSubmit = async () => {
+    if (editId) {
+      await axios.put(`${API}/${editId}`, form);
+      setEditId(null);
+    } else {
+      await axios.post(API, form);
+    }
+
+    setForm({ name: "", email: "", phone: "", course: "" });
+    fetchData();
+  };
+
+  // Delete
+  const deleteStudent = async (id) => {
+    await axios.delete(`${API}/${id}`);
+    fetchData();
+  };
+
+  // Edit
+  const editStudent = (s) => {
+    setForm(s);
+    setEditId(s.id);
+  };
+
+  return (
+    <div style={{ textAlign: "center" }}>
+      <h2>Student CRUD</h2>
+
+      <input name="name" placeholder="Name" value={form.name} onChange={handleChange} /><br /><br />
+      <input name="email" placeholder="Email" value={form.email} onChange={handleChange} /><br /><br />
+      <input name="phone" placeholder="Phone" value={form.phone} onChange={handleChange} /><br /><br />
+      <input name="course" placeholder="Course" value={form.course} onChange={handleChange} /><br /><br />
+
+      <button onClick={handleSubmit}>
+        {editId ? "Update" : "Add"}
+      </button>
+
+      <h3>Student List</h3>
+
+      {students.map((s) => (
+        <div key={s.id}>
+          {s.name} | {s.email} | {s.phone} | {s.course}
+          <br />
+          <button onClick={() => editStudent(s)}>Edit</button>
+          <button onClick={() => deleteStudent(s.id)}>Delete</button>
+          <hr />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default App;
+▶️ STEP 3: RUN PROJECT
+Start Laravel:
+php artisan serve
+Start React:
+npm start
+
+********************************************************
+
+
+🎓 1. Student Information Form 
+
+(React)
+
+▶️ STEP 1: Create React App
+npx create-react-app frontend
+cd frontend
+npm install axios
+npm start
+▶️ STEP 2: Replace App.js
+
+📍 frontend/src/App.js
+
 import React, { useState } from "react";
 
 function App() {
@@ -121,7 +338,167 @@ function App() {
 }
 
 export default App;
+----------------
+Laravel
+
+🧩 STEP 1: CREATE PROJECT
+composer create-project laravel/laravel student-api
+cd student-api
+php artisan serve
+🧩 STEP 2: DATABASE SETUP
+Create DB in phpMyAdmin:
+studentdb
+📄 .env file
+
+📍 student-api/.env
+
+DB_DATABASE=studentdb
+DB_USERNAME=root
+DB_PASSWORD=
+🧩 STEP 3: CREATE MODEL + MIGRATION
+php artisan make:model Student -m
+🧩 STEP 4: MIGRATION CODE
+
+📍 database/migrations/xxxx_create_students_table.php
+
+public function up()
+{
+    Schema::create('students', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->string('email');
+        $table->integer('age');
+        $table->string('gender');
+        $table->string('course');
+        $table->text('address');
+        $table->timestamps();
+    });
+}
+Run migration:
+php artisan migrate
+🧩 STEP 5: MODEL CODE
+
+📍 app/Models/Student.php
+
+php artisan make:model Student
+
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Student extends Model
+{
+    protected $fillable = [
+        'name',
+        'email',
+        'age',
+        'gender',
+        'course',
+        'address'
+    ];
+}
+🧩 STEP 6: CREATE CONTROLLER
+php artisan make:controller StudentController
+🧩 STEP 7: FULL CONTROLLER CODE
+
+📍 app/Http/Controllers/StudentController.php
+
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Student;
+use Illuminate\Http\Request;
+
+class StudentController extends Controller
+{
+    // CREATE
+    public function store(Request $req)
+    {
+        $student = Student::create([
+            'name' => $req->name,
+            'email' => $req->email,
+            'age' => $req->age,
+            'gender' => $req->gender,
+            'course' => $req->course,
+            'address' => $req->address
+        ]);
+
+        return response()->json($student);
+    }
+
+    // READ ALL
+    public function index()
+    {
+        return response()->json(Student::all());
+    }
+
+    // READ SINGLE
+    public function show($id)
+    {
+        return response()->json(Student::find($id));
+    }
+
+    // UPDATE
+    public function update(Request $req, $id)
+    {
+        $student = Student::find($id);
+
+        $student->update([
+            'name' => $req->name,
+            'email' => $req->email,
+            'age' => $req->age,
+            'gender' => $req->gender,
+            'course' => $req->course,
+            'address' => $req->address
+        ]);
+
+        return response()->json($student);
+    }
+
+    // DELETE
+    public function destroy($id)
+    {
+        Student::destroy($id);
+        return response()->json(["message" => "Deleted"]);
+    }
+}
+🧩 STEP 8: ROUTES
+
+📍 routes/api.php
+
+use App\Http\Controllers\StudentController;
+
+Route::get('/students', [StudentController::class, 'index']);
+Route::get('/students/{id}', [StudentController::class, 'show']);
+Route::post('/students', [StudentController::class, 'store']);
+Route::put('/students/{id}', [StudentController::class, 'update']);
+Route::delete('/students/{id}', [StudentController::class, 'destroy']);
+🧩 STEP 9: ENABLE CORS (IMPORTANT)
+
+📍 config/cors.php
+
+'paths' => ['api/*'],
+'allowed_origins' => ['*'],
+▶️ STEP 10: RUN SERVER
+php artisan serve
+
+
+*******************************************************************************
+
 🧑‍💼 2. Employee Information Form (React)
+
+▶️ STEP 1: Create React App
+npx create-react-app frontend
+cd frontend
+npm install axios
+npm start
+▶️ STEP 2: Replace App.js
+
+📍 frontend/src/App.js
+
 import React, { useState } from "react";
 
 function App() {
@@ -184,14 +561,157 @@ function App() {
 
 export default App;
 
-🎯 FINAL OUTPUT
+----------------
+laravel 
 
-React app screen dikhegi (default React logo)
+🧩 STEP 1: CREATE MODEL + MIGRATION
+php artisan make:model Employee -m
+🧩 STEP 2: MIGRATION FILE
+
+📍 database/migrations/xxxx_create_employees_table.php
+
+Replace code:
+
+public function up()
+{
+    Schema::create('employees', function (Blueprint $table) {
+        $table->id();
+        $table->string('name');
+        $table->string('email');
+        $table->string('phone');
+        $table->string('department');
+        $table->integer('salary');
+        $table->date('joiningDate');
+        $table->text('address');
+        $table->timestamps();
+    });
+}
+Run migration:
+php artisan migrate
+🧩 STEP 3: MODEL
+
+📍 app/Models/Employee.php
+php artisan make:model Employee
+
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Employee extends Model
+{
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'department',
+        'salary',
+        'joiningDate',
+        'address'
+    ];
+}
+🧩 STEP 4: CONTROLLER
+php artisan make:controller EmployeeController
+🧩 STEP 5: FULL CONTROLLER CODE
+
+📍 app/Http/Controllers/EmployeeController.php
+
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Employee;
+use Illuminate\Http\Request;
+
+class EmployeeController extends Controller
+{
+    // CREATE
+    public function store(Request $req)
+    {
+        $employee = Employee::create([
+            'name' => $req->name,
+            'email' => $req->email,
+            'phone' => $req->phone,
+            'department' => $req->department,
+            'salary' => $req->salary,
+            'joiningDate' => $req->joiningDate,
+            'address' => $req->address
+        ]);
+
+        return response()->json($employee);
+    }
+
+    // READ ALL
+    public function index()
+    {
+        return response()->json(Employee::all());
+    }
+
+    // READ SINGLE
+    public function show($id)
+    {
+        return response()->json(Employee::find($id));
+    }
+
+    // UPDATE
+    public function update(Request $req, $id)
+    {
+        $employee = Employee::find($id);
+
+        $employee->update([
+            'name' => $req->name,
+            'email' => $req->email,
+            'phone' => $req->phone,
+            'department' => $req->department,
+            'salary' => $req->salary,
+            'joiningDate' => $req->joiningDate,
+            'address' => $req->address
+        ]);
+
+        return response()->json($employee);
+    }
+
+    // DELETE
+    public function destroy($id)
+    {
+        Employee::destroy($id);
+        return response()->json(["message" => "Deleted"]);
+    }
+}
+🧩 STEP 6: ROUTES
+
+📍 routes/api.php
+
+use App\Http\Controllers\EmployeeController;
+
+Route::get('/employees', [EmployeeController::class, 'index']);
+Route::get('/employees/{id}', [EmployeeController::class, 'show']);
+Route::post('/employees', [EmployeeController::class, 'store']);
+Route::put('/employees/{id}', [EmployeeController::class, 'update']);
+Route::delete('/employees/{id}', [EmployeeController::class, 'destroy']);
+🧩 STEP 7: CORS (IMPORTANT)
+
+📍 config/cors.php
+
+'paths' => ['api/*'],
+'allowed_origins' => ['*'],
+▶️ STEP 8: RUN SERVER
+php artisan serve
+🧪 TEST API
+
+Open:
+
+http://127.0.0.1:8000/api/employees
+
+👉 Should return:
+
+[]
 
 
 
 
-
+************************************************************************************************
 
 
 Android :
@@ -236,46 +756,84 @@ Emulator tools
 
 ⏳ Time: 10–30 minutes (internet required)
 
-📱 STEP 4: Create New Project
+🆕 1) Create a NEW project (do this even if you tried before)
+Open Android Studio
 Click New Project
-Select Empty Activity
+Choose Empty Activity (IMPORTANT ❗)
 Click Next
-Fill details:
-Name → MyApp
-Language → Java ✅ (important for your exam)
-Minimum SDK → API 21 (recommended)
 
+Fill:
+
+Name: SimpleCRUD
+Language: Kotlin ✅
+Minimum SDK: API 21 (OK)
 Click Finish
 
-📱 STEP 5: Understand Project Files
+⏳ Wait for Gradle Sync to complete (bottom bar).
 
-Important files (exam me puchte hai):
+🧱 2) Fix “I don’t see package/layout” (VERY COMMON)
+Set correct view:
 
-👉 MainActivity.java
-→ Logic / code likhne ke liye
+Top-left dropdown → select Android
 
-👉 activity_main.xml
-→ UI design (buttons, text, etc.)
+Now you should see:
 
-📱 STEP 6: Run App
-Option 1: Emulator
-Click AVD Manager
-Create Virtual Device
-Click Run ▶
+app
+ ├── manifests
+ ├── java
+ │    └── com.example.simplecrud   ← your package
+ └── res
+      └── layout
+           └── activity_main.xml
+❗ If “java” or package NOT visible
+Expand app > java
+If still empty:
+You likely created No Activity project → create project again with Empty Activity
+❗ If “layout” folder missing
+Right click res
+New → Android Resource Directory
+Resource type → layout
+OK
 
+Then:
 
+Right click layout
+New → Layout Resource File
+Name: activity_main
+🎨 3) UI DESIGN
 
-Code : 
-<?xml version="1.0" encoding="utf-8"?>
+📍 Go to:
+app > res > layout > activity_main.xml
+
+Replace everything:
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/name"
+        android:id="@+id/etId"
+        android:hint="Enter ID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etName"
         android:hint="Enter Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:hint="Enter Email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etPhone"
+        android:hint="Enter Phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -304,107 +862,19 @@ Code :
         android:layout_height="wrap_content"/>
 
 </LinearLayout>
-🧠 2. Database Helper (Java)
-import android.content.*;
-import android.database.Cursor;
-import android.database.sqlite.*;
 
-public class DBHelper extends SQLiteOpenHelper {
+👉 If R error later → this file has mistake. Fix red errors.
 
-    public DBHelper(Context context) {
-        super(context, "UserDB", null, 1);
-    }
+🧠 4) Create Database Helper
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)");
-    }
+📍 Go to:
+app > java > your_package_name
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS users");
-    }
-
-    public boolean insertData(String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("name", name);
-        long result = db.insert("users", null, cv);
-        return result != -1;
-    }
-
-    public Cursor getData() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM users", null);
-    }
-
-    public boolean updateData(String id, String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("name", name);
-        db.update("users", cv, "id=?", new String[]{id});
-        return true;
-    }
-
-    public Integer deleteData(String id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete("users", "id=?", new String[]{id});
-    }
-}
-☕ 3. MainActivity (Java)
-import android.database.Cursor;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.*;
-import androidx.appcompat.app.AppCompatActivity;
-
-public class MainActivity extends AppCompatActivity {
-
-    EditText name;
-    Button insert, view, update, delete;
-    DBHelper db;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        name = findViewById(R.id.name);
-        insert = findViewById(R.id.btnInsert);
-        view = findViewById(R.id.btnView);
-        update = findViewById(R.id.btnUpdate);
-        delete = findViewById(R.id.btnDelete);
-
-        db = new DBHelper(this);
-
-        insert.setOnClickListener(v -> {
-            db.insertData(name.getText().toString());
-            Toast.makeText(this, "Inserted", Toast.LENGTH_SHORT).show();
-        });
-
-        view.setOnClickListener(v -> {
-            Cursor res = db.getData();
-            StringBuilder data = new StringBuilder();
-            while (res.moveToNext()) {
-                data.append("ID: ").append(res.getString(0)).append("\n");
-                data.append("Name: ").append(res.getString(1)).append("\n\n");
-            }
-            Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show();
-        });
-
-        update.setOnClickListener(v -> {
-            db.updateData("1", name.getText().toString());
-            Toast.makeText(this, "Updated ID 1", Toast.LENGTH_SHORT).show();
-        });
-
-        delete.setOnClickListener(v -> {
-            db.deleteData("1");
-            Toast.makeText(this, "Deleted ID 1", Toast.LENGTH_SHORT).show();
-        });
-    }
-}
-🔥 4. Kotlin Version
-📦 DBHelper.kt
+Steps:
+Right click package
+New → Kotlin Class
+Name: DBHelper
+Paste:
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -412,42 +882,50 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 class DBHelper(context: Context) :
-    SQLiteOpenHelper(context, "UserDB", null, 1) {
+    SQLiteOpenHelper(context, "MyDB", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)")
+        db.execSQL("CREATE TABLE students(id INTEGER PRIMARY KEY, name TEXT, email TEXT, phone TEXT)")
     }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS users")
-    }
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
-    fun insertData(name: String): Boolean {
+    fun insertData(id: String, name: String, email: String, phone: String): Boolean {
         val db = writableDatabase
         val cv = ContentValues()
+        cv.put("id", id)
         cv.put("name", name)
-        return db.insert("users", null, cv) != -1L
+        cv.put("email", email)
+        cv.put("phone", phone)
+        return db.insert("students", null, cv) != -1L
     }
 
     fun getData(): Cursor {
         val db = readableDatabase
-        return db.rawQuery("SELECT * FROM users", null)
+        return db.rawQuery("SELECT * FROM students", null)
     }
 
-    fun updateData(id: String, name: String): Boolean {
+    fun updateData(id: String, name: String, email: String, phone: String) {
         val db = writableDatabase
         val cv = ContentValues()
         cv.put("name", name)
-        db.update("users", cv, "id=?", arrayOf(id))
-        return true
+        cv.put("email", email)
+        cv.put("phone", phone)
+        db.update("students", cv, "id=?", arrayOf(id))
     }
 
-    fun deleteData(id: String): Int {
+    fun deleteData(id: String) {
         val db = writableDatabase
-        return db.delete("users", "id=?", arrayOf(id))
+        db.delete("students", "id=?", arrayOf(id))
     }
 }
-📱 MainActivity.kt
+⚙️ 5) MainActivity
+
+📍 Open:
+MainActivity.kt
+
+Replace everything:
+
 import android.database.Cursor
 import android.os.Bundle
 import android.widget.*
@@ -455,44 +933,83 @@ import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var name: EditText
     lateinit var db: DBHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        name = findViewById(R.id.name)
-        val insert = findViewById<Button>(R.id.btnInsert)
-        val view = findViewById<Button>(R.id.btnView)
-        val update = findViewById<Button>(R.id.btnUpdate)
-        val delete = findViewById<Button>(R.id.btnDelete)
+        val etId = findViewById<EditText>(R.id.etId)
+        val etName = findViewById<EditText>(R.id.etName)
+        val etEmail = findViewById<EditText>(R.id.etEmail)
+        val etPhone = findViewById<EditText>(R.id.etPhone)
+
+        val btnInsert = findViewById<Button>(R.id.btnInsert)
+        val btnView = findViewById<Button>(R.id.btnView)
+        val btnUpdate = findViewById<Button>(R.id.btnUpdate)
+        val btnDelete = findViewById<Button>(R.id.btnDelete)
 
         db = DBHelper(this)
 
-        insert.setOnClickListener {
-            db.insertData(name.text.toString())
+        btnInsert.setOnClickListener {
+            db.insertData(
+                etId.text.toString(),
+                etName.text.toString(),
+                etEmail.text.toString(),
+                etPhone.text.toString()
+            )
             Toast.makeText(this, "Inserted", Toast.LENGTH_SHORT).show()
         }
 
-        view.setOnClickListener {
+        btnView.setOnClickListener {
             val res: Cursor = db.getData()
             val data = StringBuilder()
+
             while (res.moveToNext()) {
                 data.append("ID: ${res.getString(0)}\n")
-                data.append("Name: ${res.getString(1)}\n\n")
+                data.append("Name: ${res.getString(1)}\n")
+                data.append("Email: ${res.getString(2)}\n")
+                data.append("Phone: ${res.getString(3)}\n\n")
             }
+
             Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show()
         }
 
-        update.setOnClickListener {
-            db.updateData("1", name.text.toString())
-            Toast.makeText(this, "Updated ID 1", Toast.LENGTH_SHORT).show()
+        btnUpdate.setOnClickListener {
+            db.updateData(
+                etId.text.toString(),
+                etName.text.toString(),
+                etEmail.text.toString(),
+                etPhone.text.toString()
+            )
+            Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show()
         }
 
-        delete.setOnClickListener {
-            db.deleteData("1")
-            Toast.makeText(this, "Deleted ID 1", Toast.LENGTH_SHORT).show()
+        btnDelete.setOnClickListener {
+            db.deleteData(etId.text.toString())
+            Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show()
         }
     }
 }
+🔧 6) If “AppCompatActivity error”
+
+📍 Go to:
+app > build.gradle (Module)
+
+Add inside dependencies:
+
+implementation 'androidx.appcompat:appcompat:1.6.1'
+
+Click Sync Now
+
+▶️ 7) RUN APP
+Option A: Emulator
+Click Device Manager
+Create device
+Start it
+Option B (Best):
+Connect phone
+Enable USB Debugging
+Then:
+
+👉 Click ▶ Run
